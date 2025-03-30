@@ -1,16 +1,20 @@
-from rest_framework import generics , mixins
+from rest_framework import generics , mixins,permissions,authentication
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 #from django import Http404
 from django.shortcuts import  get_object_or_404
 
+from .permission import IsStaffEditorPermission
 from .models import Product
 from .serializers import ProductSerializer
+
 
 class ProductListCreateView(generics.ListCreateAPIView):
     queryset=Product.objects.all()
     serializer_class=ProductSerializer
+    permission_classes=[IsStaffEditorPermission]
+    authentication_classes=[authentication.SessionAuthentication]
  
     def perform_create(self,serializer):
         # serializer.save(user=self.request.user)
@@ -43,6 +47,7 @@ class ProductUpdateAPIView(generics.UpdateAPIView):
 
     serializer_class=ProductSerializer
     lookup_field='pk'
+    permission_classes=[permissions.IsAuthenticatedOrReadOnly]
 
     def perform_update(self,serializer):
 
