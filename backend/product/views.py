@@ -78,7 +78,7 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
 product_detail_view=ProductDetailAPIView.as_view()
 
 
-class ProductMixinView(mixins.ListModelMixin,mixins.RetrieveModelMixin,generics.GenericAPIView):
+class ProductMixinView(mixins.ListModelMixin,mixins.RetrieveModelMixin,mixins.CreateModelMixin,generics.GenericAPIView):
 
     queryset=Product.objects.all()
     serializer_class=ProductSerializer
@@ -89,11 +89,25 @@ class ProductMixinView(mixins.ListModelMixin,mixins.RetrieveModelMixin,generics.
         pk=kwargs.get("pk")
 
         if pk is not None:
-            return self.retrive(request,*args,**kwargs)
+            return self.retrieve(request,*args,**kwargs)
         
         return self.list(request,*args,**kwargs)
     
-    # def post ()
+    def post (self,request,*args,**kwargs):
+        return self.create(request,*args,**kwargs)
+    
+    def perform_create(self,serializer):
+        # serializer.save(user=self.request.user)
+        
+        print(serializer.validated_data)
+        title=serializer.validated_data.get('title')
+        content=serializer.validated_data.get('content') or None
+
+        if content is None:
+            content="this a single view doing some stuff i guess"
+        serializer.save(content=content)
+    
+    
 
 product_mixin_view=ProductMixinView.as_view()
 
