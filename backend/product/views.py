@@ -5,6 +5,7 @@ from rest_framework.response import Response
 #from django import Http404
 from django.shortcuts import  get_object_or_404
 
+from api.authentication import TokenAuthentication
 from .permission import IsStaffEditorPermission
 from .models import Product
 from .serializers import ProductSerializer
@@ -14,7 +15,8 @@ class ProductListCreateView(generics.ListCreateAPIView):
     queryset=Product.objects.all()
     serializer_class=ProductSerializer
     permission_classes=[permissions.IsAdminUser,IsStaffEditorPermission]
-    authentication_classes=[authentication.SessionAuthentication]
+    # authentication_classes=[authentication.SessionAuthentication,
+    #                         TokenAuthentication]
  
     def perform_create(self,serializer):
         # serializer.save(user=self.request.user)
@@ -45,6 +47,9 @@ product_list_create_view=ProductListCreateView.as_view()
 class ProductUpdateAPIView(generics.UpdateAPIView):
     queryset=Product.objects.all()
 
+    permission_classes=[permissions.IsAdminUser,IsStaffEditorPermission]
+
+
     serializer_class=ProductSerializer
     lookup_field='pk'
     permission_classes=[permissions.IsAuthenticatedOrReadOnly]
@@ -61,6 +66,8 @@ product_update_view=ProductUpdateAPIView.as_view()
 
 class ProductDeleteAPIView(generics.DestroyAPIView):
     queryset=Product.objects.all()
+    permission_classes=[permissions.IsAdminUser,IsStaffEditorPermission]
+
 
     serializer_class=ProductSerializer
 
@@ -74,6 +81,9 @@ product_delete_view=ProductDeleteAPIView.as_view()
 
 
 class ProductDetailAPIView(generics.RetrieveAPIView):
+
+    permission_classes=[permissions.IsAdminUser,IsStaffEditorPermission]
+
     queryset=Product.objects.all()
 
     serializer_class=ProductSerializer
