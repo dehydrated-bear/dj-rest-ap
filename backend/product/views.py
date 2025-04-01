@@ -13,7 +13,7 @@ from .serializers import ProductSerializer
 class ProductListCreateView(generics.ListCreateAPIView):
     queryset=Product.objects.all()
     serializer_class=ProductSerializer
-    permission_classes=[IsStaffEditorPermission]
+    permission_classes=[permissions.IsAdminUser,IsStaffEditorPermission]
     authentication_classes=[authentication.SessionAuthentication]
  
     def perform_create(self,serializer):
