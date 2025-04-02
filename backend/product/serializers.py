@@ -11,12 +11,16 @@ class ProductSerializer(serializers.ModelSerializer):
 
         fields = [
             'pk',
+            'url',
             'title',
             'content',
             'price',
             'sale_price',
             'get_discount'
         ]
+
+    def get_url(self,obj):
+        request=self.context.get('request')
 
     def get_get_discount(self,obj):
 
