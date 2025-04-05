@@ -13,7 +13,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     '''
     queryset=Product.objects.all()
     serializer_class=ProductSerializer
-    look_field="pk"#defaultt bruh
+    lookup_field='pk'#defaultt bruh
 
 
 
@@ -30,7 +30,7 @@ class ProductGenericViewSet(
     '''
     queryset=Product.objects.all()
     serializer_class=ProductSerializer
-    lookup_filed='pk'#def
+    lookup_field="pk"#def
     
 # product_list_view=ProductGenericViewSet.as_view({'get':'list'})
 
