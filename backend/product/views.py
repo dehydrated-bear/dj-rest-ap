@@ -10,10 +10,15 @@ from django.shortcuts import  get_object_or_404
 from .models import Product
 from .serializers import ProductSerializer
 
-from api.mixins import StaffEditorPermissionMixin
+from api.mixins import StaffEditorPermissionMixin,UserQuerySetMixin
 
 
-class ProductListCreateView(StaffEditorPermissionMixin,generics.ListCreateAPIView):
+class ProductListCreateView(
+                    UserQuerySetMixin,
+                    StaffEditorPermissionMixin,
+                    generics.ListCreateAPIView):
+    # allow_staff_view=True
+    
     queryset=Product.objects.all()
     serializer_class=ProductSerializer
     # permission_classes=[permissions.IsAdminUser,IsStaffEditorPermission]
@@ -31,7 +36,16 @@ class ProductListCreateView(StaffEditorPermissionMixin,generics.ListCreateAPIVie
 
         if content is None:
             content=title
-        serializer.save(content=content)
+        serializer.save(user=self.request.user,content=content)
+
+    # def get_queryset(self,*args,**kwargs):
+    #     qs=super().get_queryset(*args,**kwargs)
+    #     request=self.request
+    #     user=request.user
+    #     if not user.is_authenticated:
+    #         return Product.objects.none()
+    #     # print(request.user)
+    #     return qs.filter(user=request.user)
 
         #could also send a signal
 
@@ -48,7 +62,7 @@ product_list_create_view=ProductListCreateView.as_view()
 
 # product_list_view=ProductListAPIView.as_view()
 
-class ProductUpdateAPIView(StaffEditorPermissionMixin,generics.UpdateAPIView):
+class ProductUpdateAPIView(UserQuerySetMixin,StaffEditorPermissionMixin,generics.UpdateAPIView):
     queryset=Product.objects.all()
 
     # permission_classes=[permissions.IsAdminUser,IsStaffEditorPermission]
@@ -68,7 +82,7 @@ product_update_view=ProductUpdateAPIView.as_view()
 
 
 
-class ProductDeleteAPIView(StaffEditorPermissionMixin,generics.DestroyAPIView):
+class ProductDeleteAPIView(UserQuerySetMixin,StaffEditorPermissionMixin,generics.DestroyAPIView):
     queryset=Product.objects.all()
     # permission_classes=[permissions.IsAdminUser,IsStaffEditorPermission]
 
@@ -84,7 +98,8 @@ product_delete_view=ProductDeleteAPIView.as_view()
 
 
 
-class ProductDetailAPIView(StaffEditorPermissionMixin,generics.RetrieveAPIView):
+class ProductDetailAPIView(UserQuerySetMixin,StaffEditorPermissionMixin,generics.RetrieveAPIView):
+    allow_staff_view=True
 
     # permission_classes=[permissions.IsAdminUser,IsStaffEditorPermission]
 
