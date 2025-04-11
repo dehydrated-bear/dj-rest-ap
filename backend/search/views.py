@@ -4,8 +4,12 @@ from rest_framework import generics\
 from product.models import Product
 from product.serializers import ProductSerializer
 
+class SearchListView(generics.GenericAPIView):
+    def get(self,request,*args,**kwargs):
+        
 
-class SearchListView(generics.ListAPIView):
+
+class SearchListOldView(generics.ListAPIView):
     queryset=Product.objects.all()
     serializer_class=ProductSerializer
 

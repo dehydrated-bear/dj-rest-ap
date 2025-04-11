@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #third party api
-    'algoliasearch_django'
+    'algoliasearch_django',
 
     #third party packages
     'rest_framework',
