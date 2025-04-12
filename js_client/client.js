@@ -1,4 +1,7 @@
 const loginform=document.getElementById("login-form")
+const contentcontainer=document.getElementById("content-container")
+
+
 const baseendpoint="http://localhost:8000/api"
 
 if (loginform){
@@ -27,11 +30,37 @@ function handlelogin(event){
         console.log(response)
         return response.json()
     })
-    .then( x=>{
-        console.log(x)
-    })
+    .then( handleauthdata)
     .catch(err=>{
         console.log("err",err)
     })
 
+}
+
+function writetocontent(){
+    if (contentcontainer){
+        contentcontainer.innerHTML="<pre>"+JSON.stringify(data)+"</pre>"
+    }
+}
+
+function handleauthdata(authData){
+    localStorage.setItem('access',authData.access)
+    localStorage.setItem('refresh',authData.refresh)
+
+}
+
+function getproductlist(){
+    const endpoint=`${baseendpoint}/products/`
+    const options={
+        method:"GET",
+        headers:{
+            "Content-Type":"application/json"
+        }
+    }
+    fetch(endpoint,options)
+    .then(response=>response.json())
+    .then(data=>{
+        console.log(data)
+        writetocontent(data)
+    })
 }
