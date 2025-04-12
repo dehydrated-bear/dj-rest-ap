@@ -18,10 +18,20 @@ function handlelogin(event){
     const options={
         'method':'POST',
         headers:{
-            "ContentType":"application/json"
+            "Content-Type":"application/json"
         },
         body:""
     }
     fetch(loginendpoint,options)
+    .then(response=>{
+        console.log(response)
+        return response.json()
+    })
+    .then( x=>{
+        console.log(x)
+    })
+    .catch(err=>{
+        console.log("err",err)
+    })
 
 }
