@@ -29,8 +29,8 @@ A fully functional RESTful Inventory Management System built using **Django REST
 
 ### 1. Clone the repo:
 
-git clone https://github.com/yourusername/inventory-management-api.git
-cd inventory-management-api
+git clone https://github.com/dehydrated-bear/dj-rest-ap.git
+cd dj-rest-ap
 
 ###2. Create a virtual environment & install dependencies:
 
